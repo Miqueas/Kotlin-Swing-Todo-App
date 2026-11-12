@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder
 class BottomBar : JPanel {
     val checkBox = JCheckBox("Done", false)
     val input = JTextField(20)
-    val provider = TasksProvider.getInstance()
+    val provider = TasksProvider.instance
 
     constructor() {
         layout = BoxLayout(this, BoxLayout.X_AXIS)

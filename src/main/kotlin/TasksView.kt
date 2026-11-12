@@ -6,7 +6,7 @@ import javax.swing.*
 import java.awt.*
 
 class TasksView : JPanel {
-    private val provider = TasksProvider.getInstance()
+    private val provider = TasksProvider.instance
     private val list = JPanel()
 
     constructor() {
@@ -37,7 +37,7 @@ class TasksView : JPanel {
     }
 
     private fun build() {
-        val tasks = provider.getTasks()
+        val tasks = provider.tasks
 
         for (task in tasks) {
             list.add(TaskItem(task))

@@ -1,49 +1,48 @@
 package io.github.miqueas.kotlin_swing_todo_app
 
 import java.beans.*
+import java.util.UUID
 
 class TasksProvider {
-    private val notifier = PropertyChangeSupport(this)
-    private val tasks: MutableList<TaskModel> = mutableListOf()
+    private val _notifier = PropertyChangeSupport(this)
+    private val _tasks: MutableList<TaskModel> = mutableListOf()
+    // Automatically casts to a read-only list
+    val tasks: List<TaskModel> = _tasks
 
     companion object {
-        private var instance: TasksProvider? = null
-
-        fun getInstance(): TasksProvider {
-            if (instance == null) {
-                instance = TasksProvider()
+        private var _instance: TasksProvider? = null
+        val instance: TasksProvider get() {
+            if (_instance == null) {
+                _instance = TasksProvider()
             }
 
-            return instance!!
+            return _instance!!
         }
     }
 
-    // Automatically casts to a read-only list
-    fun getTasks(): List<TaskModel> = tasks
-
     fun onChange(listener: PropertyChangeListener) {
-        notifier.addPropertyChangeListener(listener)
+        _notifier.addPropertyChangeListener(listener)
     }
 
     fun addTask(text: String, done: Boolean) {
-        val task = TaskModel(tasks.size, text, done)
-        tasks.add(task)
-        notifier.firePropertyChange("add", null, tasks)
+        val task = TaskModel(UUID.randomUUID(), text, done)
+        _tasks.add(task)
+        _notifier.firePropertyChange("add", null, _tasks)
     }
 
-    fun removeTask(id: Int) {
-        tasks.removeAll { it.id == id }
-        notifier.firePropertyChange("remove", null, tasks)
+    fun removeTask(id: UUID) {
+        _tasks.removeAll { it.id == id }
+        _notifier.firePropertyChange("remove", null, _tasks)
     }
 
-    fun setDone(id: Int, done: Boolean) {
-        for (i in tasks.indices) {
-            val task = tasks[i]
+    fun setDone(id: UUID, done: Boolean) {
+        for (i in _tasks.indices) {
+            val task = _tasks[i]
             if (task.id == id) {
-                tasks[i] = task.copy(done = done)
+                _tasks[i] = task.copy(done = done)
             }
         }
 
-        notifier.firePropertyChange("update", null, tasks)
+        _notifier.firePropertyChange("update", null, _tasks)
     }
 }

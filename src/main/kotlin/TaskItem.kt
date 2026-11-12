@@ -5,7 +5,7 @@ import javax.swing.*
 import java.awt.*
 
 class TaskItem : JPanel {
-    private val provider = TasksProvider.getInstance()
+    private val provider = TasksProvider.instance
     private val task: TaskModel
 
     constructor(task: TaskModel) {
